@@ -1,0 +1,97 @@
+# Default values for mcp-math-operations.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/adorsys-gis/mcp-math-operations
+  # Defaults to the chart appVersion when left empty.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Server configuration (mapped to the binary's environment variables).
+config:
+  bindAddr: "0.0.0.0:3000"
+  rustLog: "info"
+  # Extra Host-header values accepted by rmcp's DNS-rebinding protection.
+  # The chart always adds the in-cluster service name and loopback; add any
+  # ingress hostnames clients will use here.
+  allowedHosts: []
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: mcp-math.local
+      paths:
+        - path: /mcp
+          pathType: Prefix
+  tls: []
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: "1"
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+# Hardened defaults matching the distroless non-root runtime (uid 65532).
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  privileged: false
+  capabilities:
+    drop:
+      - ALL
+
+# TCP probes — the MCP endpoint requires POST with headers, so a port check is
+# the most reliable signal.
+probes:
+  startup:
+    tcpSocket:
+      port: http
+    failureThreshold: 30
+    periodSeconds: 2
+  liveness:
+    tcpSocket:
+      port: http
+    periodSeconds: 15
+  readiness:
+    tcpSocket:
+      port: http
+    periodSeconds: 10
+
+podAnnotations: {}
+podLabels: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

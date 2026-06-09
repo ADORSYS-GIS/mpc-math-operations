@@ -1,0 +1,29 @@
+services:
+  math:
+    build: .
+    image: mcp-math-operations:latest
+    environment:
+      BIND_ADDR: 0.0.0.0:3000
+      RUST_LOG: info
+      # Allow the compose service name through rmcp's Host-header (DNS-rebinding)
+      # check, so the inspector can reach it at http://math:3000/mcp.
+      ALLOWED_HOSTS: "math,localhost,127.0.0.1"
+    # Published so you can also hit the server directly (e.g. curl / your own client).
+    # The inspector reaches it over the compose network as http://math:3000/mcp
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped
+
+  inspector:
+    image: ghcr.io/modelcontextprotocol/inspector:latest
+    depends_on:
+      - math
+    environment:
+      HOST: 0.0.0.0
+      MCP_AUTO_OPEN_ENABLED: "false"
+      # Disable the Inspector proxy's session-token auth so the UI connects
+      # without pasting a token. Safe here: ports are bound to 127.0.0.1 only.
+      DANGEROUSLY_OMIT_AUTH: "true"
+    ports:
+      - "127.0.0.1:6274:6274" # web UI
+      - "127.0.0.1:6277:6277" # proxy

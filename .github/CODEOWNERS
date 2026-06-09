@@ -1,0 +1,10 @@
+# Every change needs a human owner who accepts responsibility for the result
+# (per the AI working agreement). Replace the placeholder team with the real
+# owning team before enabling branch protection's "require code owner review".
+
+* @adorsys-gis/maintainers
+
+# Areas that benefit from focused ownership.
+/.github/        @adorsys-gis/maintainers
+/charts/         @adorsys-gis/maintainers
+/Dockerfile      @adorsys-gis/maintainers

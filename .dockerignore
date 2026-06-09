@@ -1,0 +1,12 @@
+# Build artifacts and VCS — keep the build context minimal.
+/target
+**/target
+.git
+.gitignore
+.github
+charts
+docker-compose.yml
+*.md
+!README.md
+.dockerignore
+.DS_Store

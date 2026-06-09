@@ -1,0 +1,31 @@
+{{ .Chart.Name }} {{ .Chart.AppVersion }} is deployed.
+
+The MCP endpoint is served at path /mcp over HTTP-streamable transport.
+
+{{- if .Values.ingress.enabled }}
+
+Reachable via Ingress:
+{{- range .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}{{ .path }}
+  {{- end }}
+{{- end }}
+
+NOTE: add each ingress host to `config.allowedHosts` or the server's
+DNS-rebinding protection will reject it with HTTP 403.
+{{- else }}
+
+Port-forward to reach it locally:
+
+  kubectl --namespace {{ .Release.Namespace }} port-forward \
+    svc/{{ include "mcp-math-operations.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+
+Then point an MCP client at http://localhost:{{ .Values.service.port }}/mcp
+(the chart already allows the "localhost" Host header).
+{{- end }}
+
+Verify the signed image before trusting a deployment:
+
+  cosign verify {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }} \
+    --certificate-identity-regexp 'https://github.com/.+/.github/workflows/.+' \
+    --certificate-oidc-issuer https://token.actions.githubusercontent.com

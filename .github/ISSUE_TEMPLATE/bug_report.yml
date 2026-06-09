@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a defect with reproducible evidence
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Per the governance: every important claim needs evidence. Please include
+        enough detail to reproduce.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, the tool/endpoint called, and inputs.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      description: Image tag, chart version, or git SHA.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs / output
+      render: shell

@@ -1,0 +1,21 @@
+apiVersion: v2
+name: mcp-math-operations
+description: >-
+  HTTP-streamable Model Context Protocol (MCP) server exposing a large set of
+  arithmetic, trigonometry, statistics, probability and combinatorics tools plus
+  2D/3D geographic SVG plotting.
+type: application
+# version  = chart version (SemVer). appVersion = the shipped image tag.
+# Both are overridden by the release workflow from the git tag.
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/adorsys-gis/mcp-math-operations
+sources:
+  - https://github.com/adorsys-gis/mcp-math-operations
+keywords:
+  - mcp
+  - model-context-protocol
+  - math
+  - rust
+maintainers:
+  - name: adorsys-gis maintainers
