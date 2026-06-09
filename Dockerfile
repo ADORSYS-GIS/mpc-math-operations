@@ -4,7 +4,7 @@
 # cargo-chef lets us cache the compiled dependency tree as its own layer, so a
 # source-only change doesn't trigger a full rebuild of every crate. The base is
 # Debian bookworm (glibc) to match the distroless/cc-debian12 runtime below.
-FROM lukemathwalker/cargo-chef:latest-rust-1.95 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.96 AS chef
 WORKDIR /build
 
 # ── Stage 2: plan ─────────────────────────────────────────────────────────────
