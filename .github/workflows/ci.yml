@@ -20,7 +20,7 @@ jobs:
     name: Lint, build & test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # rustup honors rust-toolchain.toml, installing the pinned 1.95.0 + components.
       - uses: Swatinem/rust-cache@v2
       - name: Format
@@ -34,7 +34,7 @@ jobs:
     name: Dependency audit (cargo-deny)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: EmbarkStudios/cargo-deny-action@v2
         with:
           command: check advisories bans licenses sources
@@ -43,7 +43,7 @@ jobs:
     name: Helm lint & template
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: azure/setup-helm@v5
       - name: Lint
         run: helm lint charts/mcp-math-operations
@@ -61,7 +61,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: docker/setup-buildx-action@v4
       - name: Build image (no push)
         uses: docker/build-push-action@v7
@@ -82,7 +82,7 @@ jobs:
           ignore-unfixed: true
       - name: Upload scan results
         if: always()
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.4
         with:
           sarif_file: trivy-results.sarif
           category: trivy-image
